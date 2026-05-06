@@ -1,139 +1,80 @@
-/* src/pages/OrganizationDashboard.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-function OrganizationDashboard() {
-  const storedUser = localStorage.getItem("user");
-  let user = null;
-  let token = localStorage.getItem("token");
-
-  if (storedUser) {
-    try {
-      user = JSON.parse(storedUser);
-    } catch {
-      user = null;
-    }
-  }
-
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
-    if (!token || !user) return;
-
-    const fetchTasks = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5009/api/tasks/my-tasks`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTasks(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchTasks();
-  }, [token, user]);
-
-  const handleApproval = async (submissionId, approve = true) => {
-    try {
-      await axios.post(
-        `http://localhost:5009/api/completions/${submissionId}/review`,
-        { approve },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      // Update tasks to reflect change
-      setTasks((prev) =>
-        prev.map((t) => ({
-          ...t,
-          submissions: t.submissions.map((s) =>
-            s._id === submissionId ? { ...s, status: approve ? "Approved" : "Rejected" } : s
-          ),
-        }))
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  if (!user) return <p>Please log in</p>;
-
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>Organization Dashboard</h1>
-
-      {tasks.length === 0 ? (
-        <p>No tasks posted yet</p>
-      ) : (
-        tasks.map((task) => (
-          <div key={task._id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <h4>Submissions:</h4>
-            {task.submissions.length === 0 ? (
-              <p>No submissions yet</p>
-            ) : (
-              <ul>
-                {task.submissions.map((s) => (
-                  <li key={s._id}>
-                    Volunteer: {s.userName} | Status: {s.status}
-                    {s.status === "Pending" && (
-                      <>
-                        <button onClick={() => handleApproval(s._id, true)}>Approve</button>
-                        <button onClick={() => handleApproval(s._id, false)}>Reject</button>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
-
-export default OrganizationDashboard;
-*/
-import React from "react";
 
 function OrganizationDashboard() {
 
   const storedUser = localStorage.getItem("user");
   let user = storedUser ? JSON.parse(storedUser) : null;
 
-  // 🔥 Fake Data
-  const tasks = [
-    {
-      id: 1,
-      title: "Design Logo",
-      description: "Need a modern logo",
-      submissions: [
+  const [tasks, setTasks] = useState([]);
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5009/api/tasks/my-tasks",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+
+        // format backend → match your UI
+        const formatted = res.data.map((task) => ({
+          id: task._id,
+          title: task.title,
+          description: task.description,
+          submissions: task.submissions.map((s) => ({
+            id: s._id,
+            userName: s.userId?.name || "Unknown",
+            status: s.status,
+            text: s.submissionText,
+            link: s.submissionLink,
+            file: s.submissionFile
+          }))
+        }));
+
+        setTasks(formatted);
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  const handleReview = async (id, status) => {
+    try {
+      await axios.post(
+        "http://localhost:5009/api/completions/review",
         {
-          id: "s1",
-          userName: "Eden",
-          status: "Pending"
+          completionId: id,
+          status
         },
         {
-          id: "s2",
-          userName: "Alex",
-          status: "Approved"
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
-      ]
-    },
-    {
-      id: 2,
-      title: "Write Blog",
-      description: "Need a tech blog article regarding the usage of AI in warfare",
-      submissions: [
-        {
-          id: "s3",
-          userName: "Sam",
-          status: "Pending"
-        }
-      ]
+      );
+
+      // update UI without reload
+      setTasks((prev) =>
+        prev.map((task) => ({
+          ...task,
+          submissions: task.submissions.map((s) =>
+            s.id === id ? { ...s, status } : s
+          )
+        }))
+      );
+
+    } catch (err) {
+      console.error(err);
     }
-  ];
+  };
 
   return (
     <div className="orgdash-page">
@@ -142,40 +83,142 @@ function OrganizationDashboard() {
   
       <div className="tasks-container">
   
-        {tasks.map((task) => (
-          <div key={task.id} className="task-card">
+        {tasks.length === 0 ? (
+          <p>No tasks yet</p>
+        ) : (
+          tasks.map((task) => (
+            <div key={task.id} className="task-card">
   
-            <h3>{task.title}</h3>
-            <p className="task-desc">{task.description}</p>
+              <h3>{task.title}</h3>
+              <p className="task-desc">{task.description}</p>
   
-            <h4>Submissions</h4>
+              <h4>Submissions</h4>
   
-            <div className="submissions">
+              <div className="submissions">
   
-              {task.submissions.map((s) => (
-                <div key={s.id} className="submission-card">
+                {task.submissions.length === 0 ? (
+                  <p>No submissions yet</p>
+                ) : (
+                  task.submissions.map((s) => (
+                    <div key={s.id} className="submission-card">
   
-                  <p>
-                    <strong>{s.userName}</strong>
-                    <span className={`status ${s.status.toLowerCase()}`}>
-                      {s.status}
-                    </span>
-                  </p>
+                      <p>
+                        <strong>{s.userName}</strong>
+                        <span className={`status ${s.status.toLowerCase()}`}>
+                          {s.status}
+                        </span>
+                      </p>
   
-                  {s.status === "Pending" && (
-                    <div className="action-buttons">
-                      <button className="approve">Approve</button>
-                      <button className="reject">Reject</button>
+                      {s.status === "pending" && (
+                        <div className="action-buttons">
+                            <button
+                            onClick={() => setSelectedSubmission(s)}
+                            className="view-btn"
+                            >
+                              View
+                            </button>
+                          <button
+                            className="approve"
+                            onClick={() => handleReview(s.id, "approved")}
+                          >
+                            Approve
+                          </button>
+  
+                          <button
+                            className="reject"
+                            onClick={() => handleReview(s.id, "rejected")}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+  
                     </div>
-                  )}
+                  ))
+                )}
   
-                </div>
-              ))}
+              </div>
   
             </div>
-  
-          </div>
-        ))}
+          ))
+        )}
+        {selectedSubmission && (
+  <div className="modal-overlay">
+
+    <div className="modal">
+
+      <h2>Submission Details</h2>
+
+      <p><strong>Volunteer:</strong> {selectedSubmission.userName}</p>
+
+      {selectedSubmission.text && (
+        <p><strong>Text:</strong> {selectedSubmission.text}</p>
+      )}
+
+      {selectedSubmission.link && (
+        <p>
+          <strong>Link:</strong>{" "}
+          <a href={selectedSubmission.link} target="_blank" rel="noreferrer">
+            Open Link
+          </a>
+        </p>
+      )}
+
+      {selectedSubmission.file && (
+        <p>
+          <strong>File:</strong>{" "}
+          <a
+            href={`http://localhost:5009/${selectedSubmission.file}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Download File
+          </a>
+        </p>
+      )}
+
+      <p>
+        <strong>Status:</strong>{" "}
+        {selectedSubmission.status}
+      </p>
+
+      {selectedSubmission.status === "pending" && (
+        <div className="modal-actions">
+
+          <button
+            className="approve"
+            onClick={() => {
+              handleReview(selectedSubmission.id, "approved");
+              setSelectedSubmission(null);
+            }}
+          >
+            Approve
+          </button>
+
+          <button
+            className="reject"
+            onClick={() => {
+              handleReview(selectedSubmission.id, "rejected");
+              setSelectedSubmission(null);
+            }}
+          >
+            Reject
+          </button>
+
+        </div>
+      )}
+
+      <button
+        className="close-btn"
+        onClick={() => setSelectedSubmission(null)}
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+)}
   
       </div>
   

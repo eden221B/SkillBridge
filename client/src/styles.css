@@ -796,3 +796,299 @@
     font-size: 12px;
     color: #567C8D;
   }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    z-index: 9999; /* 🔥 THIS makes it a real popup */
+  }
+  
+  .modal {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 420px;
+    max-width: 90%;
+  
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3); /* makes it pop */
+  }
+
+  /* SUBMIT PAGE */
+
+.submit-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F5EFEB;
+  }
+  
+  /* CARD */
+  
+  .submit-card {
+    width: 450px;
+    background: #FFFFFF;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .submit-card h2 {
+    margin-bottom: 20px;
+    color: #2F4156;
+  }
+  
+  /* FORM */
+  
+  .submit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .submit-form textarea,
+  .submit-form input[type="text"] {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #C8D9E6;
+    font-size: 14px;
+    font-family: inherit;
+    transition: 0.2s;
+  }
+  
+  .submit-form textarea {
+    min-height: 120px;
+    resize: none;
+  }
+  
+  /* FILE INPUT */
+  
+  .file-input {
+    border: none;
+    background: #C8D9E6;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #2F4156;
+  }
+  
+  /* FOCUS */
+  
+  .submit-form textarea:focus,
+  .submit-form input:focus {
+    outline: none;
+    border-color: #567C8D;
+    box-shadow: 0 0 0 2px rgba(86,124,141,0.2);
+  }
+  
+  /* BUTTON */
+  
+  .submit-form button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background: #567C8D;
+    color: #FFFFFF;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .submit-form button:hover {
+    background: #2F4156;
+    transform: translateY(-2px);
+  }
+  /* HIDE DEFAULT INPUT */
+.file-label input {
+    display: none;
+  }
+  
+  /* CUSTOM BUTTON */
+  
+  .file-label {
+    display: inline-block;
+    padding: 12px;
+    border-radius: 10px;
+    background: #C8D9E6;
+    color: #2F4156;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+  }
+  
+  .file-label:hover {
+    background: #567C8D;
+    color: #FFFFFF;
+  }
+  
+  /* FILE NAME */
+  
+  .file-name {
+    font-size: 12px;
+    color: #567C8D;
+    margin-top: -5px;
+  }
+  /* VIEW BUTTON */
+
+.view-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 15px;
+    background: #C8D9E6;
+    color: #2F4156;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .view-btn:hover {
+    background: #567C8D;
+    color: #FFFFFF;
+  }
+  /* OVERLAY */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* MODAL */
+  .modal {
+    background: #FFFFFF;
+    padding: 30px 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: modal-pop 0.3s ease;
+  }
+  
+  /* MODAL POP ANIMATION */
+  @keyframes modal-pop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  /* MODAL TITLE */
+  .modal h2 {
+    color: #2F4156;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* TEXT / INFO */
+  .modal p {
+    font-size: 14px;
+    color: #567C8D;
+    margin: 5px 0;
+  }
+  
+  .modal a {
+    color: #567C8D;
+    text-decoration: underline;
+  }
+  
+  .modal a:hover {
+    color: #2F4156;
+  }
+  
+  /* STATUS STYLING */
+  .modal p strong {
+    color: #2F4156;
+  }
+  
+  .status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .status.pending {
+    background: #C8D9E6;
+    color: #2F4156;
+  }
+  
+  .status.approved {
+    background: #567C8D;
+    color: #FFFFFF;
+  }
+  
+  .status.rejected {
+    background: #2F4156;
+    color: #FFFFFF;
+  }
+  
+  /* MODAL ACTION BUTTONS */
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .modal-actions .approve {
+    background: #567C8D;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .modal-actions .approve:hover {
+    background: #2F4156;
+  }
+  
+  .modal-actions .reject {
+    background: #F55F5F;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .modal-actions .reject:hover {
+    background: #D13939;
+  }
+  
+  /* CLOSE BUTTON */
+  .close-btn {
+    background: #C8D9E6;
+    color: #2F4156;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 16px;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 15px;
+    transition: 0.2s;
+  }
+  
+  .close-btn:hover {
+    background: #567C8D;
+    color: #FFFFFF;
+  }

@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
 const taskRoutes = require("./routes/taskRoutes");
 const completionRoutes = require("./routes/completionRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/completions", completionRoutes);
+app.use("/api/users", userRoutes);
+app.use("/uploads", express.static("uploads"));
 
 // connect database
 connectDB();

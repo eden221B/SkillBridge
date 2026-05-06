@@ -40,43 +40,45 @@ function SubmitTask() {
   };
 
   return (
+    <div className="submit-page">
+  
+      <div className="submit-card">
+  
+        <h2>Submit Task Work</h2>
+  
+        <form onSubmit={handleSubmit} className="submit-form">
+  
+          <textarea
+            placeholder="Describe what you completed"
+            value={submissionText}
+            onChange={(e) => setSubmissionText(e.target.value)}
+          />
+  
+          <input
+            type="text"
+            placeholder="Submission link (optional)"
+            value={submissionLink}
+            onChange={(e) => setSubmissionLink(e.target.value)}
+          />
+  
+  <label className="file-label">
+  {file ? "Change File" : "Upload File"}
 
-    <div style={{ padding: "30px" }}>
+  <input
+    type="file"
+    onChange={(e) => setFile(e.target.files[0])}
+  />
+</label>
 
-      <h2>Submit Task Work</h2>
-
-      <form onSubmit={handleSubmit}>
-
-        <textarea
-          placeholder="Describe what you completed"
-          value={submissionText}
-          onChange={(e) => setSubmissionText(e.target.value)}
-        />
-
-        <br /><br />
-
-        <input
-          type="text"
-          placeholder="Submission link (optional)"
-          value={submissionLink}
-          onChange={(e) => setSubmissionLink(e.target.value)}
-        />
-
-        <br /><br />
-
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-
-        <br /><br />
-
-        <button type="submit">Submit Work</button>
-
-      </form>
-
+{file && <p className="file-name">{file.name}</p>}
+  
+          <button type="submit">Submit Work</button>
+  
+        </form>
+  
+      </div>
+  
     </div>
-
   );
 
 }
