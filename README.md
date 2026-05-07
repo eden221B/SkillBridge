@@ -25,3 +25,7 @@ npm run dev
 - Task marketplace
 - Task submission system
 - Volunteer & Organization dashboards
+
+## Project Information
+- Developed By: Asmita Dey
+- Roll Number: 2210990193
